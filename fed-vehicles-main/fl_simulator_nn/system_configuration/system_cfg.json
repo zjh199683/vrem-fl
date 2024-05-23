@@ -1,0 +1,745 @@
+{
+    "mobility": true,
+    "min_local_steps": 1,
+    "max_local_steps": 50,
+    "time_slot": 1,
+    "tx_strategy": "opt",
+    "apollo_records": {
+        "0": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "1": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "2": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "3": [
+            {
+                "road": "road02down",
+                "record": [
+                    20
+                ]
+            }
+        ],
+        "4": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "5": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "6": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "7": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "8": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "9": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "10": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "11": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "12": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "13": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "14": [
+            {
+                "road": "road02down",
+                "record": [
+                    20
+                ]
+            }
+        ],
+        "15": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "16": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "17": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "18": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "19": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "20": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "21": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "22": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "23": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "24": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "25": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "26": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "27": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "28": [
+            {
+                "road": "road02down",
+                "record": [
+                    20
+                ]
+            }
+        ],
+        "29": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "30": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "31": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "32": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "33": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "34": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "35": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "36": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "37": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "38": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "39": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "40": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "41": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "42": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "43": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "44": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "45": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "46": [
+            {
+                "road": "road02down",
+                "record": [
+                    20
+                ]
+            }
+        ],
+        "47": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "48": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "49": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "50": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "51": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "52": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "53": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "54": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "55": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "56": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "57": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "58": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "59": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "60": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "61": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "62": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "63": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "64": [
+            {
+                "road": "road02down",
+                "record": [
+                    20
+                ]
+            }
+        ],
+        "65": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "66": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "67": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "68": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "69": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "70": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "71": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "72": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "73": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "74": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "75": [
+            {
+                "road": "road02down",
+                "record": [
+                    5
+                ]
+            }
+        ],
+        "76": [
+            {
+                "road": "road02down",
+                "record": [
+                    21
+                ]
+            }
+        ],
+        "77": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "78": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "79": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "80": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ],
+        "81": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "82": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "83": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "84": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "85": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "86": [
+            {
+                "road": "road02down",
+                "record": [
+                    4
+                ]
+            }
+        ],
+        "87": [
+            {
+                "road": "road02down",
+                "record": [
+                    6
+                ]
+            }
+        ],
+        "88": [
+            {
+                "road": "road02down",
+                "record": [
+                    2
+                ]
+            }
+        ],
+        "89": [
+            {
+                "road": "road02down",
+                "record": [
+                    19
+                ]
+            }
+        ],
+        "90": [
+            {
+                "road": "road02down",
+                "record": [
+                    3
+                ]
+            }
+        ],
+        "91": [
+            {
+                "road": "road02down",
+                "record": [
+                    18
+                ]
+            }
+        ]
+    }
+}

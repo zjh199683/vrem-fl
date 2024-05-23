@@ -1,0 +1,17 @@
+*.net.xml
+*.graphml
+*.osm
+vehicular_simulator/.idea/*
+*.xml
+*.sumocfg
+*.csv
+*.pk
+
+Least_Squares_FL_code/__pycache__/*
+__pycache__/*
+Least_Squares_FL_code/Scheduling_algos/__pycache__/*
+fl_simulator_nn/data/cifar10/raw_data/*
+fl_simulator_nn/data/cifar10/all_data/*
+fl_simulator_nn/data/apolloscape/**
+fl_simulator_nn/logs/**
+fl_simulator_nn/fl_vrem_nn.job
