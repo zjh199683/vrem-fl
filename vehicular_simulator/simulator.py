@@ -1,9 +1,10 @@
 import argparse
 import warnings
 import pandas as pd
-from tqdm import tqdm
 import traci
 import sumolib
+
+from tqdm import tqdm
 
 warnings.filterwarnings("ignore")
 map_ids_filename = '../scenarios/big_map/new_plain.edg'

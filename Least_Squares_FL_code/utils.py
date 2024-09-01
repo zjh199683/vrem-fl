@@ -1,25 +1,21 @@
-from typing import Dict, List
 import pandas as pd
 import numpy as np
 import copy
+
+from typing import Dict, Iterable, List, Tuple, Union
 from sklearn.preprocessing import StandardScaler
 
 
-def get_cancer_dataset():
-
-    data = pd.read_csv('../cancer_reg.csv', encoding='ISO-8859-1')
-    X = data[['avgAnnCount', 'avgDeathsPerYear', 'incidenceRate', 'medIncome', 'popEst2015', 'MedianAge',
-              'studyPerCap', 'PercentMarried', 'PctEmpPrivCoverage', 'PctPublicCoverage', 'BirthRate']]
-    Y = data['TARGET_deathRate']
-    scaler = StandardScaler()
-    X = scaler.fit_transform(X)
-    Y = ((Y - Y.mean()) / Y.std()).to_numpy()
-
-    return X.T, Y
-
-
-def getSyntheticDataset(sizeXUser = 500, M = 32, n = 25, r = 25, sigma = 1e-5,
-                        s_min = -2, s_max = 0, noniid = False):
+def getSyntheticDataset(
+        sizeXUser: int = 500, 
+        M: int = 32, 
+        n: int = 25, 
+        r: int = 25, 
+        sigma: float = 1e-5,
+        s_min: float = -2, 
+        s_max: float = 0, 
+        noniid: bool = False
+    ) -> Tuple[np.ndarray, np.ndarray]:
     """ Generate a synthetic dataset.
 
      :param sizeXUser: how many data points per user
@@ -65,8 +61,11 @@ def getSyntheticDataset(sizeXUser = 500, M = 32, n = 25, r = 25, sigma = 1e-5,
     return X, Y
 
 
-def setFL_DS_LSs(X, Y, M):
-
+def setFL_DS_LSs(
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        M: int
+    ) -> Tuple[np.ndarray, np.ndarray, List[np.ndarray], List[np.ndarray]]:
     Ds = []
     Ys = []
     index = 0
@@ -86,13 +85,16 @@ def setFL_DS_LSs(X, Y, M):
     return newX, newY, Ds, Ys
 
 
-def import_vehicles_data(filename, fields, min_time=0) -> Dict[int, List]:
-    """
-
-     Loads the data for the simulation
+def import_vehicles_data(
+        filename: str, 
+        fields: Union[str, Iterable[str]], 
+        min_time: int = 0
+    ) -> Dict[int, List]:
+    """ Loads the data for the simulation
 
      :parameter filename: path to the pandas dataframe with data
-     :parameter fields: fields to be loaded in the tuple (other than first time index). Iterable or single element.
+     :parameter fields: fields to be loaded in the tuple (other than first time index). 
+                        Iterable or single element.
                         Order will be preserved.
 
      :returns data: dictionary with (key, value) = (veh ID, (time index, *fields))

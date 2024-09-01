@@ -14,14 +14,14 @@ This file can also be imported as a module and contains the following function:
 """
 
 import copy
+import numpy.linalg as LA
+
+from torch.utils.tensorboard import SummaryWriter
+
 from utils.scheduler_utils import Scheduler, import_vehicles_data
 from utils.utils import *
 from utils.constants import *
 from utils.args import *
-
-import numpy.linalg as LA
-
-from torch.utils.tensorboard import SummaryWriter
 
 
 def init_clients(args_, root_path, clients, apollo_records=None, lr_state_dict=None):
@@ -208,8 +208,8 @@ if __name__ == "__main__":
     time_slot = args.time_slot
     max_latency = args.max_latency
     sim_len = args.sim_len
-    aggregator, local_steps_manager, scheduler, data_dir, logs_save_path, model_size = build_experiment(args,
-                                                                                                        client_data)
+    aggregator, local_steps_manager, scheduler, data_dir, logs_save_path, model_size = \
+        build_experiment(args, client_data)
     scheduling = args.selection_strategy
     if args.selection_strategy == 'aoi':
         scheduling = 'optimal'
@@ -258,8 +258,6 @@ if __name__ == "__main__":
             pbar.update(1)
             continue
 
-        # print("Available clients:", available_clients)
-        # print("Queued clients", queued_clients)
         # optimize global computation
         local_steps_manager.optimize_global(num_scheduled=args.n_clients)
         
@@ -281,7 +279,6 @@ if __name__ == "__main__":
             time_feature = {k: time_feature[k] for k in available_clients}
             scheduled_clients = scheduler.schedule(time_feature)
         elif scheduling == 'channel_gain':
-            # TODO: understand which is the correct index to use based on the current time and when the vehicle appears
             clients_snr = local_steps_manager.initial_bitrate
             snrs = {k: clients_snr[k] for k in available_clients}
             scheduled_clients = scheduler.channel_gain_scheduling(snrs)
@@ -292,7 +289,6 @@ if __name__ == "__main__":
         # compute actual latency and remove clients that exceed deadline
         latency_round = 0
         iter_clients = scheduled_clients.copy()
-        # print("Scheduled clients before:", scheduled_clients)
         for client in iter_clients:
             bw_slots_client = 0
             tx_bits = 0
@@ -321,7 +317,6 @@ if __name__ == "__main__":
                 # the scheduler will wait till the deadline expires
                 latency_round = max_latency
 
-        # print("Scheduled clients after:", scheduled_clients)
         if len(scheduled_clients) == 0:
             time_now += np.ceil(latency_round / time_slot)
             pbar.update(int(np.ceil(latency_round / time_slot)))
@@ -332,7 +327,6 @@ if __name__ == "__main__":
                                                 clients=scheduled_clients,
                                                 apollo_records=apollo_records,
                                                 lr_state_dict=lr_state_dict)
-        # print("Length of learners:", len(clients))
         assert len(clients) == len(scheduled_clients)
         aggregator.set_clients(clients, clients_weights)
         local_steps = [local_steps_manager.local_steps[client] for client in scheduled_clients]

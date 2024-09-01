@@ -1,7 +1,7 @@
 import cvxpy as cp
 import numpy as np
-import casadi as cs
-import do_mpc
+
+from typing import Tuple
 from abc import ABC, abstractmethod
 
 from utils.constants import *
@@ -184,19 +184,21 @@ class StepsOptimizer(ABC):
 
 
 class MobilityStepsOptimizer(StepsOptimizer):
-    def __init__(self, 
-                 system_simulator,
-                 constants,
-                 model_size: int, 
-                 comp_slots_min: int,
-                 comp_slots_max: int,
-                 time_slot: float,
-                 tx_strategy: str,
-                 l1: float=1., 
-                 rho1: float=1.,
-                 rho2: float=2e-2,
-                 w_latency: float=1.,
-                 w_tx_time: float=10.):
+    def __init__(
+            self, 
+            system_simulator,
+            constants,
+            model_size: int, 
+            comp_slots_min: int,
+            comp_slots_max: int,
+            time_slot: float,
+            tx_strategy: str,
+            l1: float=1., 
+            rho1: float=1.,
+            rho2: float=2e-2,
+            w_latency: float=1.,
+            w_tx_time: float=10.
+        ):
         super().__init__(system_simulator, constants)
         self.model_size = model_size
         self.comp_slots_min = comp_slots_min
@@ -206,18 +208,19 @@ class MobilityStepsOptimizer(StepsOptimizer):
         self.w_latency = w_latency
         self.w_tx_time = w_tx_time
         self.conv_proxy = (lambda
-                           loss_init, norm_grad_init, comp_slots, comp_slots_target:
+                           norm_grad_init, comp_slots, comp_slots_target:
                                norm_grad_init * ((1 - l1) ** (comp_slots - 1)) 
                                + rho1 * comp_slots / norm_grad_init 
                                + rho2 * (comp_slots - comp_slots_target) ** 2)
     
-    def optimize(self,
-                 comp_steps_init: int,
-                 max_latency: float,
-                 time_now: int,
-                 time_start: int,
-                 bitrate,
-                 batch_size: int):
+    def optimize(
+            self,
+            comp_steps_init: int,
+            max_latency: float,
+            time_now: int,
+            time_start: int,
+            bitrate
+        ) -> Tuple[float, int, int, int]:
         comp_slots = int(min(comp_steps_init, self.comp_slots_max))
         
         # optimize communication
@@ -272,14 +275,18 @@ class MobilityStepsOptimizer(StepsOptimizer):
 
         return cost_min * self.time_slot, comp_slots, tx_slots, idle_slots
     
-    def adjust_local_steps(self,
-                           loss_init: float,
-                           norm_grad_init: float,
-                           idle_slots: int,
-                           comp_slots_init: int,
-                           comp_slots_target: int,
-                           batch_size: int):
-        conv_proxy = lambda comp_slots: self.conv_proxy(loss_init, norm_grad_init, comp_slots,
+    def adjust_local_steps(
+            self,
+            loss_init: float,
+            norm_grad_init: float,
+            idle_slots: int,
+            comp_slots_init: int,
+            comp_slots_target: int,
+            batch_size: int
+        ) -> int:
+        conv_proxy = lambda comp_slots: self.conv_proxy(loss_init, 
+                                                        norm_grad_init, 
+                                                        comp_slots,
                                                         comp_slots_target * batch_size)
         comp_slots = self.comp_slots_min
         conv_proxy_min = np.inf
@@ -351,18 +358,6 @@ class MyopicStepsOptimizer(StepsOptimizer):
         except cp.SolverError:
             prob.solve()
 
-        # first_problem_result = self.local_steps_variable.copy().value
-        #
-        # # solve second problem (adding the max constraint)
-        # objective = self.objective_terms[0] + self.objective_terms[1]
-        # constraints.append(self.local_steps_variable[:, 0] <= cp.max(first_problem_result[:, 0]))
-        #
-        # prob = cp.Problem(cp.Minimize(objective), constraints)
-        #
-        # try:
-        #     prob.solve('GUROBI')
-        # except cp.SolverError:
-        #     prob.solve()
 
     def get_server_lr(self):
 

@@ -1,17 +1,30 @@
 import copy
 import numpy as np
-from Scheduling_algos.scheduler import Scheduler
-from Scheduling_algos.local_optimizer import LocalOptimizer
+
+from typing import Dict, Tuple, Union, List
+
+from scheduling_algos.scheduler import Scheduler
+from scheduling_algos.local_optimizer import LocalOptimizer
 
 
-def loss(X, Y, theta_k, LNR=1e-10):
+def loss(
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        theta_k: np.ndarray, 
+        LNR: float = 1e-10
+    ) -> float:
     N = X.shape[1]
     c = np.dot(X.T, theta_k) - Y
     
     return (1 / (2 * N)) * np.dot(c, c) + (LNR / 2) * np.dot(theta_k.T, theta_k)
 
 
-def grad(X, Y, theta_k, LNR=1e-10):
+def grad(
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        theta_k: np.ndarray, 
+        LNR: float = 1e-10
+    ) -> np.ndarray:
     N = X.shape[1]
     XXT = np.dot(X, X.T)
     c = np.dot(X, Y)
@@ -19,7 +32,10 @@ def grad(X, Y, theta_k, LNR=1e-10):
     return (1 / N) * (np.dot(XXT, theta_k) - c.squeeze()) + LNR * theta_k
 
 
-def condAndOptSS(X, LNR=1e-10):
+def condAndOptSS(
+        X: np.ndarray,
+        LNR: float = 1e-10
+    ) -> Tuple[float, float]:
     # the following is the Hessian for LSs
     n = X.shape[0]
     N = X.shape[1]
@@ -31,8 +47,19 @@ def condAndOptSS(X, LNR=1e-10):
     return condNumb, optSS
 
 
-def GD_LS(iterations, X, Y, theta_k=None, thetaStar=None, LNR=1e-10, AGD=False, doBacktracking=False,
-          returnParam=False, stepSize=0.01, verbose=False):
+def GD_LS(
+        iterations: int,
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        theta_k: np.ndarray = None,
+        thetaStar: np.ndarray = None, 
+        LNR: float = 1e-10, 
+        AGD: bool = False, 
+        doBacktracking: bool = False,
+        returnParam: bool = False, 
+        stepSize: float = 0.01, 
+        verbose: bool = False
+    ) -> Union[Tuple[List[float], List[float]], List[float], np.ndarray]:
     n = X.shape[0]
     N = X.shape[1]
     costs = []
@@ -59,14 +86,14 @@ def GD_LS(iterations, X, Y, theta_k=None, thetaStar=None, LNR=1e-10, AGD=False, 
         costs.append(cost)
         if doBacktracking:
             if AGD:
-                winningStep = armijoBacktracking(theta_k, [X], [Y], N, v_GD, g, cost, LNR, stabilityConst=1e-32,
-                                                 alpha=0.25, beta=0.5,
-                                                 costFunc='LinReg', myHint=4)
+                winningStep = armijoBacktracking(
+                    theta_k, [X], [Y], N, v_GD, g, cost, LNR, stabilityConst=1e-32,
+                    alpha=0.25, beta=0.5, costFunc='LinReg', myHint=4)
                 theta_k = theta_k - winningStep * v_GD
             else:
-                winningStep = armijoBacktracking(theta_k, [X], [Y], N, g, g, cost, LNR, stabilityConst=1e-32,
-                                                 alpha=0.25, beta=0.5,
-                                                 costFunc='LinReg', myHint=4)
+                winningStep = armijoBacktracking(
+                    theta_k, [X], [Y], N, g, g, cost, LNR, stabilityConst=1e-32,
+                    alpha=0.25, beta=0.5, costFunc='LinReg', myHint=4)
                 theta_k = theta_k - winningStep * g
         else:
             theta_k = theta_k - stepSize * g
@@ -81,10 +108,27 @@ def GD_LS(iterations, X, Y, theta_k=None, thetaStar=None, LNR=1e-10, AGD=False, 
     return costs
 
 
-def Fed_GD_LS(X, Y, Ds, Ys, model_size,
-              rounds, client_data, time_slot, m, max_latency,
-              mobility=True, comp='opt', scheduling='optimal', batch_size=1, comp_slots_min=1,
-              tx='opt', reg_lambda=1e-6, aoi_only=False, beta=1e-3):
+def Fed_GD_LS(
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        Ds: Dict[int, np.ndarray], 
+        Ys: Dict[int, np.ndarray], 
+        model_size: int,
+        rounds: int, 
+        client_data: Dict[int, np.ndarray], 
+        time_slot: float, 
+        m: int,
+        max_latency: float,
+        mobility: bool = True, 
+        comp: str = 'opt', 
+        scheduling: str = 'optimal', 
+        batch_size: int = 1, 
+        comp_slots_min: int = 1,
+        tx: str = 'opt', 
+        reg_lambda: float = 1e-6, 
+        aoi_only: bool = False,
+        beta: float = 1e-3
+    ) -> Tuple[List[float], List[float], List[int], List[float], List[float]]:
 
     n = X.shape[0]
     # initialize theta_k and thetas to store the evolution of theta_k
@@ -94,7 +138,7 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
     costs = []
     distancesFromOptimum = []
 
-    thetaStar, costStar = solveWithNewton(X, Y, LNR=reg_lambda)
+    thetaStar, _ = solveWithNewton(X, Y, LNR=reg_lambda)
 
     # create scheduler
     scheduler = Scheduler(beta=beta)
@@ -108,14 +152,12 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
         time_start[client] = client_data[client][0]  # first time instant when client is available
         time_end[client] = time_start[client] + len(
            client_data[client][-1]['bitrate']) - 1  # last time instant when client is available
-        # time_end[client] = time_start[client] + len(
-        #     client_data[client][1]) - 1
         # create local optimization blocks
-        # TODO: delete / 1e4 on bitrate
         try:
             btr = client_data[client][-1]['estimBitrate'] / 5e4
         except KeyError:
             btr = client_data[client][-1]['bitrate'] / 5e4
+
         optimizers[client] = LocalOptimizer(
            model_size=model_size, 
            comp_slots_min=comp_slots_min,
@@ -123,10 +165,6 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
            time_slot=time_slot, 
            bitrate=btr
         )
-        # optimizers[client] = LocalOptimizer(
-        #     model_size=model_size, comp_slots_min=comp_slots_min,
-        #     time_start=time_start[client], time_slot=time_slot, bitrate=client_data[client][1] / 1e4)
-        # compute eigenspectrum for condNumber and stepSizes
         condNumb, optStepSize = condAndOptSS(Ds[client], LNR=reg_lambda)
         optSSs[client] = optStepSize
         condNumbs[client] = condNumb
@@ -171,7 +209,6 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
         print("Number of available clients:", len(available_clients))
         for client in available_clients:
             norm_grad_k_client = np.linalg.norm(grad(Ds[client], Ys[client], w, reg_lambda))
-            # noinspection PyTupleAssignmentBalance
             if mobility:
                 latency_client, score_client, comp_slots_client, tx_steps_client, idle_slots_client = optimizers[client].local_optimization(
                     norm_grad_x0=norm_grad_k_client,
@@ -212,13 +249,6 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
 
         w_new = np.zeros((n,))  # global model initialization
 
-        '''# remove client that exceed simulation time
-        iter_clients = scheduled_clients.copy()
-        for client in iter_clients:
-            if latencies_all[client] >= 3600:
-                del latencies_all[client]
-                scheduled_clients.remove(client)'''
-                
         # compute actual round latency
         latency_round = 0
         latencies_all_true = dict()
@@ -232,7 +262,6 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
             while tx_bits < model_size and (tx_slot_last_client - slots_offset_client) <= max_latency / time_slot:
                 try:
                     tx_bits += client_data[client][1]['bitrate'][tx_slot_last_client] / 5e4 * time_slot
-                    # tx_bits += client_data[client][1][tx_slot_last_client] / 1e4 * time_slot
                 except IndexError:
                     break
                 
@@ -257,7 +286,6 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
         if len(strugglers):
             print('Strugglers:', strugglers)
             print('Latency gap:', max_latency - latencies_all[strugglers[0]])
-            #input('Press enter to continue')
             
         # updates by scheduled clients
         print("Number of scheduled clients:", len(scheduled_clients))
@@ -271,9 +299,17 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
             print(f'est tx time for client {client}: {tx_time[client]}')
             total_steps += local_steps_all[client]
             total_tx_steps += tx_time_all_true[client]
-            # mini-batch SGD can be done by randomly sampling columns from Ds[agent] and Ys[agent]
-            w_client = GD_LS(iterations=local_steps_all[client], X=Ds[client], Y=Ys[client], theta_k=w, LNR=reg_lambda,
-                             doBacktracking=False, returnParam=True, stepSize=optSSs[client], verbose=False)
+            w_client = GD_LS(
+                iterations=local_steps_all[client], 
+                X=Ds[client], 
+                Y=Ys[client], 
+                theta_k=w, 
+                LNR=reg_lambda,
+                doBacktracking=False, 
+                returnParam=True, 
+                stepSize=optSSs[client], 
+                verbose=False
+            )
             w_new = w_new.squeeze() + w_client.squeeze()
 
         try:
@@ -297,7 +333,11 @@ def Fed_GD_LS(X, Y, Ds, Ys, model_size,
     return costs, distancesFromOptimum, slots, steps, tx_steps
 
 
-def solveWithNewton(X, Y, LNR=1e-6):
+def solveWithNewton(
+        X: np.ndarray, 
+        Y: np.ndarray, 
+        LNR: float = 1e-6
+    ) -> Tuple[np.ndarray, float]:
     n = X.shape[0]
     N = X.shape[1]
     theta_k = np.zeros((n,))
@@ -313,8 +353,21 @@ def solveWithNewton(X, Y, LNR=1e-6):
     return theta_k, optCost
 
 
-def armijoBacktracking(theta_k, Ds, Ys, N, pDecFib, g, costFib, reg_lambda, stabilityConst=1e-32, alpha=0.25, beta=0.5,
-                       costFunc='LogReg', myHint=1):
+def armijoBacktracking(
+        theta_k: np.ndarray, 
+        Ds: List[np.ndarray], 
+        Ys: List[np.ndarray], 
+        N: int, 
+        pDecFib: np.ndarray, 
+        g: np.ndarray, 
+        costFib: float, 
+        reg_lambda: float, 
+        stabilityConst: float = 1e-32, 
+        alpha: float = 0.25, 
+        beta: float = 0.5,
+        costFunc: str = 'LogReg', 
+        myHint: int = 1
+    ) -> float:
     csum = np.cumsum(np.ones((50,)))
     csum = np.hstack((0, csum))
     A_LRs = myHint * np.power(beta, csum)

@@ -1,11 +1,8 @@
-import time
-from typing import Dict, List, Tuple
 import warnings
-
 import numpy as np
 
 from utils.constants import *
-from .local_steps_optimizer import MobilityStepsOptimizer, round_local_steps
+from .local_steps_optimizer import MobilityStepsOptimizer
 
 
 class LocalStepsManager:
@@ -53,14 +50,12 @@ class LocalStepsManager:
             client_data: dict,
             max_local_steps: int,
             min_local_steps: int = 1,
-            # max_server_lr: bool=False,
             local_steps_optimizer: MobilityStepsOptimizer = None,
             C1: float = 10.0,
             C2: float = 1e-2,
             eps: float = 1e-3,
             time_slot: float = 1
-            # rng: np.random._generator.Generator=None,
-    ):
+        ):
         assert min_local_steps <= max_local_steps, f"min_local_steps ({min_local_steps}) is larger" \
                                                    f" than max_local_steps ({max_local_steps})!"
 
@@ -96,25 +91,13 @@ class LocalStepsManager:
         return self.__strategy
 
     @strategy.setter
-    def strategy(self, strategy):
+    def strategy(self, strategy: str):
         if strategy in ALL_COMP_STRATEGIES:
             self.__strategy = strategy
         else:
             warnings.warn("strategy is set to random!", RuntimeWarning)
             self.__strategy = "random"
 
-    '''@property
-    def rng(self):
-        return self.__rng
-    
-
-    @rng.setter
-    def rng(self, rng):
-        if rng is None:
-            seed = int(time.time())
-            self.__rng = np.random.default_rng(seed=seed)
-        else:
-            self.__rng = rng'''
 
     def optimize_global(self, num_scheduled: int):
         """
@@ -134,10 +117,13 @@ class LocalStepsManager:
             round(np.sqrt(self.C1 / (self.C2 * (1 + 1 / num_scheduled)))),
             self.max_local_steps)
 
-    def optimize_local(self,
-                       max_latency: int = None,
-                       time_now: int = None,
-                       available_clients: list = []):
+
+    def optimize_local(
+            self,
+            max_latency: int = None,
+            time_now: int = None,
+            available_clients: list = []
+        ):
         """
         returns a sequence of number of local_steps,
          this function is expected to be called at the beginning
@@ -148,24 +134,6 @@ class LocalStepsManager:
             np.array(shape=(self.n_clients), dtype=np.uint16)
 
         """
-        '''self.iter += 1
-
-        if self.strategy == "uniform":
-            self.local_steps = self.rng.integers(
-                low=self.min_local_steps,
-                high=self.max_local_steps,
-                size=(self.n_clients,)
-            )
-            if local_lr is not None:
-                self.server_lr = local_lr * (self.local_steps.T @ self.client_weights)
-
-        elif self.strategy == "poisson":
-            self.local_steps = np.clip(
-                self.rng.poisson(lam=self.poisson_rates), self.min_local_steps, self.max_local_steps)
-
-            if local_lr is not None:
-                self.server_lr = local_lr * (self.local_steps.T @ self.client_weights)'''
-
         if self.strategy == "min":
             for client in self.comp_slots:
                 self.comp_slots[client] = self.min_local_steps
@@ -183,7 +151,8 @@ class LocalStepsManager:
                     time_now=time_now,
                     time_start=self.client_data[client][0],
                     bitrate=self.client_data[client][1]['estimBitrate'],
-                    batch_size=self.client_data[client][2])
+                    batch_size=self.client_data[client][2]
+                )
                 if self.strategy == 'max':
                     comp_slots_client += idle_slots_client
                     idle_slots_client = 0
@@ -202,15 +171,20 @@ class LocalStepsManager:
 
             raise NotImplementedError(error_message)
 
-    def adjust_local_steps(self,
-                           client: int,
-                           loss_init: float,
-                           norm_grad_init: float):
-        local_steps_client = self.local_steps_optimizer.adjust_local_steps(loss_init=loss_init,
-                                                                           norm_grad_init=norm_grad_init,
-                                                                           idle_slots=self.idle_slots[client],
-                                                                           comp_slots_init=self.comp_slots[client],
-                                                                           comp_slots_target=self.local_steps_global_opt,
-                                                                           batch_size=self.client_data[client][2])
+
+    def adjust_local_steps(
+            self,
+            client: int,
+            loss_init: float,
+            norm_grad_init: float
+        ) -> int:
+        local_steps_client = self.local_steps_optimizer.adjust_local_steps(
+            loss_init=loss_init,
+            norm_grad_init=norm_grad_init,
+            idle_slots=self.idle_slots[client],
+            comp_slots_init=self.comp_slots[client],
+            comp_slots_target=self.local_steps_global_opt,
+            batch_size=self.client_data[client][2]
+        )
         self.local_steps[client] = local_steps_client
         return local_steps_client
