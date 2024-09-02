@@ -1,23 +1,16 @@
-from models import *
-from datasets import *
-from learner import *
-from client import *
-from aggregator import *
-from torchmetrics import JaccardIndex
-from metrics import *
+from fl_simulator_nn.models import *
+from fl_simulator_nn.datasets import *
+from fl_simulator_nn.learner import *
+from fl_simulator_nn.client import *
+from fl_simulator_nn.aggregator import *
 
-from energy_optimizer.local_steps_manager import *
-from energy_optimizer.system_simulator import *
-from energy_optimizer.local_steps_optimizer import *
+from fl_simulator_nn.steps_optimizer.local_steps_manager import *
+from fl_simulator_nn.steps_optimizer.local_steps_optimizer import *
 
-from .optim import *
 from .metrics import *
-from .constants import *
 
 from torch.utils.data import DataLoader
 from copy import deepcopy
-
-from tqdm import tqdm
 
 
 def get_data_dir(experiment_name):
@@ -117,7 +110,6 @@ def get_learner(
         is_binary_classification = False
     elif name == "apolloscape":
         criterion = nn.CrossEntropyLoss(reduction="mean", ignore_index=255).to(device)
-        # metric = JaccardIndex(task="multiclass", num_classes=11, ignore_index=255).to(device)
         metric = Metrics([str(i) for i in range(11)])
         model = SegmentationCNN(pretrained=False, num_classes=11).to(device)
         is_binary_classification = False
@@ -364,11 +356,14 @@ def get_client(
     )
 
 
-def get_local_steps_optimizer(cfg_file_path, model_size, tx_strategy, clients_weights=None):
+def get_local_steps_optimizer(cfg_file_path,
+                              model_size,
+                              tx_strategy):
     """
 
     :param cfg_file_path:
-    :param clients_weights
+    :param model_size:
+    :param tx_strategy:
     :return:
         LocalStepsOptimizer
     """
@@ -382,83 +377,13 @@ def get_local_steps_optimizer(cfg_file_path, model_size, tx_strategy, clients_we
     with open(cfg_file_path, "r") as f:
         cfg = json.load(f)
 
-    if clients_weights is None and not cfg['mobility']:
-        warnings.warn(
-            "clients weight are initialized uniformly in local steps optimizer",
-            RuntimeWarning
-        )
 
-        n_clients = len(cfg["computation_times"])
-        cfg["clients_weights"] = np.full(n_clients, 1/n_clients)
-
-    else:
-        cfg["clients_weights"] = deepcopy(clients_weights)
-
-    if "batteries_maximum_capacities" in cfg:
-        batteries_simulator = BatteriesSimulator(
-            batteries_levels=cfg["batteries_levels"],
-            maximum_capacities=cfg["batteries_maximum_capacities"],
-            minimum_capacities=cfg["batteries_minimum_capacities"],
-            n_batteries=len(cfg["clients_weights"])
-        )
-
-        system_simulator = SystemSimulator(
-            clients_weights=cfg["clients_weights"],
-            full_harvested_energy=np.array(cfg["full_harvested_energy"]),
-            window_size=cfg["window_size"],
-            server_deadline=cfg["server_deadline"],
-            computation_times=np.array(cfg["computation_times"]),
-            transmission_times=np.array(cfg["transmission_times"]),
-            computation_energies=np.array(cfg["computation_energies"]),
-            transmission_energies=np.array(cfg["transmission_energies"]),
-            batteries_simulator=batteries_simulator
-        )
-
-        return BatteryStepsOptimizer(
-            system_simulator=system_simulator,
-            constants=cfg["constants"]
-        )
-
-    if cfg["mobility"]:
-        return MobilityStepsOptimizer(
-            system_simulator=None,
-            constants=None,
-            model_size=model_size,
-            comp_slots_min=cfg["min_local_steps"],
-            comp_slots_max=cfg["max_local_steps"],
-            time_slot=cfg["time_slot"],
-            tx_strategy=tx_strategy)
-
-    system_simulator = SystemSimulator(
-        clients_weights=cfg["clients_weights"],
-        full_harvested_energy=np.array(cfg["full_harvested_energy"]),
-        window_size=cfg["window_size"],
-        server_deadline=cfg["server_deadline"],
-        computation_times=np.array(cfg["computation_times"]),
-        transmission_times=np.array(cfg["transmission_times"]),
-        computation_energies=np.array(cfg["computation_energies"]),
-        transmission_energies=np.array(cfg["transmission_energies"]),
-        batteries_simulator=None
-    )
-
-    if system_simulator.window_size == 1:
-        return MyopicStepsOptimizer(
-            system_simulator=system_simulator,
-            constants=cfg["constants"]
-        )
-    elif system_simulator.window_size == system_simulator.full_harvested_energy.shape[1]:
-        return HorizonStepsOptimizer(
-            system_simulator=system_simulator,
-            constants=cfg["constants"]
-        )
-    else:
-        raise NotImplementedError(
-            f"Possible values for local steps optimizer are"
-            f" `HorizonStepsOptimizer`, `MyopicStepsOptimize` and `BatteryStepsOptimizer`,"
-            f"`window_size={system_simulator.window_size}`"
-            f" and `horizon={system_simulator.full_harvested_energy.shape[1]}`"
-        )
-
+    return MobilityStepsOptimizer(
+        model_size=model_size,
+        comp_slots_min=cfg["min_local_steps"],
+        comp_slots_max=cfg["max_local_steps"],
+        time_slot=cfg["time_slot"],
+        tx_strategy=tx_strategy)
 
 def get_local_steps_manager(
         strategy,
@@ -469,10 +394,6 @@ def get_local_steps_manager(
         time_slot,
         local_steps_optimizer=None
 ):
-    # TODO: should be updated when LocalStepsOptimizer and SystemSimulator are implemented
-  
-    # seed = (seed if (seed is not None and seed >= 0) else int(time.time()))
-    # rng = np.random.default_rng(seed=seed)
 
     return LocalStepsManager(
         strategy=strategy,

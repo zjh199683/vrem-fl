@@ -1,5 +1,4 @@
 import json
-import glob
 import numpy as np
 
 filename = 'system_cfg.json'
@@ -17,7 +16,7 @@ records = [
 
 apollo_records = dict()
 for id in range(92):
-    idx = 1#np.random.choice(np.arange(0, 4), p=[0.3, 0.2, 0.3, 0.2])
+    idx = np.random.choice(np.arange(0, 4), p=[0.3, 0.2, 0.3, 0.2])
     road = roads[idx]
     record = records[idx]
     apollo_records[id] = [{'road' : road, 'record' : [int(np.random.choice(record))]}]

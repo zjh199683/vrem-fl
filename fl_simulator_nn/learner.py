@@ -176,8 +176,6 @@ class Learner:
         if isinstance(y_pred, dict):
             y_pred = y_pred['out']
         loss_vec = self.criterion(y_pred, y)
-        # TODO: check division when using jaccard
-        #metric = self.metric(y_pred, y)  # / len(y)
         self.metric.add_sample(y_pred.detach().argmax(dim=1), y)
         metric = self.metric.percent_mIoU()
         if weights is not None:
@@ -190,12 +188,6 @@ class Learner:
         
         grad_norm = None
         if norm:
-            # grad_norm = 0
-            # for param in self.model.parameters():
-            #     param_grad_norm = param.grad.data.norm(2)
-            #     grad_norm += param_grad_norm.item() ** 2
-            #
-            # grad_norm = grad_norm ** .5
             grads = [
                 param.grad.detach().flatten()
                 for param in self.model.parameters()

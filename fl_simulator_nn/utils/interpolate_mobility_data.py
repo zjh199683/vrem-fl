@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from datetime import datetime
+# from datetime import datetime
 
 # Read data
 filename = '../../taxi_february.csv' # veh_id,time,position,seconds,x,y

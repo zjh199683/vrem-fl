@@ -1,5 +1,5 @@
 class Client(object):
-    r"""Implements one clients
+    r"""Implements one client
 
     Attributes
     ----------
@@ -105,7 +105,6 @@ class Client(object):
                 loss_batch, _, _ = self.learner.fit_batch(batch=batch)
                 loss.append(loss_batch)
             self.train_loss = sum(loss) / len(loss)
-            print(time.time()-s)
 
 
     def get_full_gradient(self):
@@ -123,11 +122,6 @@ class Client(object):
 
         train_loss, train_acc = self.learner.evaluate_iterator(self.val_iterator)
         test_loss, test_acc = self.learner.evaluate_iterator(self.test_iterator)
-
-        # self.logger.add_scalar("Train/Loss", train_loss, self.counter)
-        # self.logger.add_scalar("Train/Metric", train_acc, self.counter)
-        # self.logger.add_scalar("Test/Loss", test_loss, self.counter)
-        # self.logger.add_scalar("Test/Metric", test_acc, self.counter)
 
         return train_loss, train_acc, test_loss, test_acc
     
