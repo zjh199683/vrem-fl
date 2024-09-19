@@ -7,9 +7,8 @@ python generate_cfg_file.py
 cd ../
 python run_experiment.py \
   apolloscape \
-  FedAvg \
   optimal \
-  --bz 32 \
+  --bz 4 \
   --optimizer sgd \
   --local_lr 0.001 \
   --lr_scheduler constant \
@@ -19,6 +18,7 @@ python run_experiment.py \
   --log_freq 1 \
   --verbose 1 \
   --logs_save_path logs/logs_optimal_apolloscape \
-  --n_clients 30 \
+  --n_clients 5 \
+  --sim_len 780 \
   --cfg_file_path system_configuration/system_cfg.json \
   --seed 0
