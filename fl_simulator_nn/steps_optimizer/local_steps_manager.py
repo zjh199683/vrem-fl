@@ -55,7 +55,7 @@ class LocalStepsManager:
             C2: float = 1e-2,
             eps: float = 1e-3,
             time_slot: float = 1
-        ):
+    ):
         assert min_local_steps <= max_local_steps, f"min_local_steps ({min_local_steps}) is larger" \
                                                    f" than max_local_steps ({max_local_steps})!"
 
@@ -76,11 +76,7 @@ class LocalStepsManager:
         self.initial_bitrate = dict.fromkeys(client_data.keys())
         self.time_slot = time_slot
 
-        if self.strategy in \
-                [
-                    'opt',
-                    'max'
-                ]:
+        if self.strategy in ['opt', 'max']:
             assert local_steps_optimizer is not None
             f'steps_optimizer is required with {self.strategy} strategy.'
 
@@ -98,7 +94,6 @@ class LocalStepsManager:
             warnings.warn("strategy is set to random!", RuntimeWarning)
             self.__strategy = "random"
 
-
     def optimize_global(self, num_scheduled: int):
         """
         Estimate homogeneous optimal number of local computation steps.
@@ -107,51 +102,46 @@ class LocalStepsManager:
         ----------
         num_scheduled: int
             maximum number of scheduled clients
-            
-        Returns
-        -------
-        h_opt: int
-            estimated optimal number of local computation steps
+
         """
         self.local_steps_global_opt = min(
             round(np.sqrt(self.C1 / (self.C2 * (1 + 1 / num_scheduled)))),
             self.max_local_steps)
-
 
     def optimize_local(
             self,
             max_latency: int = None,
             time_now: int = None,
             available_clients: list = []
-        ):
+    ):
         """
-        returns a sequence of number of local_steps,
-         this function is expected to be called at the beginning
-         of each round when used with aggregator.
+        Optimize local computation steps for each available client.
 
-        :param local_lr: value of the local learning rate, default is None
-        :return:
-            np.array(shape=(self.n_clients), dtype=np.uint16)
+        Parameters
+        ----------
+        available_clients: list
+            list of all available clients
+        time_now: int
+            current simulation time
+        max_latency: int
+            maximum allowed latency
 
         """
         if self.strategy == "min":
             for client in self.comp_slots:
                 self.comp_slots[client] = self.min_local_steps
 
-        elif self.strategy in \
-                [
-                    'opt',
-                    'max'
-                ]:
+        elif self.strategy in ['opt', 'max']:
             for client in available_clients:
                 client_offset = int(time_now - self.client_data[client][0])
-                score_client, comp_slots_client, tx_slots_client, idle_slots_client = self.local_steps_optimizer.optimize(
-                    comp_steps_init=self.local_steps_global_opt,
-                    max_latency=max_latency,
-                    time_now=time_now,
-                    time_start=self.client_data[client][0],
-                    bitrate=self.client_data[client][1]['estimBitrate'],
-                    batch_size=self.client_data[client][2]
+                score_client, comp_slots_client, tx_slots_client, idle_slots_client = (
+                    self.local_steps_optimizer.optimize(
+                        comp_steps_init=self.local_steps_global_opt,
+                        max_latency=max_latency,
+                        time_now=time_now,
+                        time_start=self.client_data[client][0],
+                        bitrate=self.client_data[client][1]['estimBitrate']
+                    )
                 )
                 if self.strategy == 'max':
                     comp_slots_client += idle_slots_client
@@ -171,13 +161,28 @@ class LocalStepsManager:
 
             raise NotImplementedError(error_message)
 
-
     def adjust_local_steps(
             self,
             client: int,
             loss_init: float,
             norm_grad_init: float
-        ) -> int:
+    ) -> int:
+
+        """
+        Adjust local computation steps for a given client.
+
+        Parameters
+        ----------
+        client: client index
+        loss_init: initial loss value
+        norm_grad_init: initial gradient norm
+
+        Returns
+        -------
+        local_steps_client: int
+            adjusted number of local computation steps
+
+        """
         local_steps_client = self.local_steps_optimizer.adjust_local_steps(
             loss_init=loss_init,
             norm_grad_init=norm_grad_init,
