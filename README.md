@@ -11,14 +11,14 @@ Two federated learning tasks are implemented.
 The code for this experiment is included in the folder _Least_Squares_FL_code_.
 We generate syntehtic dataset for this experiment, however including custom simulated or real-world data is straightforward. 
 To change the dataset, it is sufficient to adjust line 20 in the file _main_FL_LS.py_. 
-In our implementation, the heterogenity of the synthetic data can be tuned through the input argument _noniid_ and the parameter _grad_ in _utils.getSyntheticDataset()_, whereby smaller _grad_ means more non-iid data.
+In our implementation, the heterogenity of the synthetic data can be tuned through the input argument ``noniid`` and the parameter ``grad`` in ``utils.getSyntheticDataset()``, whereby smaller ``grad`` means more non-iid data.
 
 2. The second task trains a deep neural network model for semantic segmentation of images. 
 The code for this experiment is included in the folder _fl_simulator_nn_. 
 We use the real-world dataset ApolloScape in the training experiment, which is freely available online, see [ApolloScape].
 ApolloScape gathers frames from video streams acquired by moving cameras and is suited to simulating vehicular training tasks.
 To change dataset, it is sufficient to adjust lines 233-240 in the file _run_experiment.py_. 
-To change the learned model, local training algorithm, or global aggregation algorithm, it is sufficient to change the relevant methods and parameters in _get_learner()_ and _get_client()_ in _init_clients()_ (for local training and models) and _get_learner()_, _get_local_steps_optimizer()_, _get_local_steps_manager()_, and _get_aggregator()_ in _build_experiment()_ (for global training), all in _run_experiment.py_.
+To change the learned model, local training algorithm, or global aggregation algorithm, it is sufficient to change the relevant methods and parameters in ``get_learner()`` and ``get_client()`` in ``init_clients()`` (for local training and models) and ``get_learner()``, ``get_local_steps_optimizer()``, ``get_local_steps_manager()``, and ``get_aggregator()`` in ``build_experiment()`` (for global training), all in _run_experiment.py_.
 
 ## Client mobility and bitrate
 In all experiments clients are mobile, which affects the channel quality and upload bitrate. 
