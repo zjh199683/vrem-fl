@@ -1,6 +1,6 @@
 # VREM-FL
 The code in this repository implements algorithms and simulations of the article 
-``VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning''
+"VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning"
 published in the IEEE Transactions on Vehicular Technology.
 Please jump to the bottom for full citation and all references.
 
@@ -37,13 +37,13 @@ the client scheduling algorithms implemented in the code are:
 - a method based on the uplink channel gain at the beginning of the learning rounds adapted from [Chen24].
 The client scheduling strategy can be chosen through the _scheduling_ keyword at line 34 of _Least_Squares_FL_code/main_FL_LS.py_ and at line 213 of _fl_simulator_nn/run_experiment.py_, respectively.
 
-The transmission of local models to the aggregator can be chosen between ``optimal'' (VREM-FL), ``min_tx'', and ''min_latency''.
-This can be set through the ``tx'' parameter at line 36 of _Least_Squares_FL_code/main_FL_LS.py_
-or through the ``tx_strategy'' keyword input parameter of _get_local_steps_optimizer()_ at line 157 of _fl_simulator_nn/run_experiment.py_, respectively.
+The transmission of local models to the aggregator can be chosen between ``optimal`` (VREM-FL), ``min_tx``, and ``min_latency``.
+This can be set through the ``tx`` parameter at line 36 of _Least_Squares_FL_code/main_FL_LS.py_
+or through the ``tx_strategy`` keyword input parameter of _get_local_steps_optimizer()_ at line 157 of _fl_simulator_nn/run_experiment.py_, respectively.
 
-The number of local steps in the training of local models can be chosen between ``optimal'' (VREM-FL), ``min'', and ``max''.
-This can be set through the ``comp'' parameter at line 35 of _Least_Squares_FL_code/main_FL_LS.py_
-or through the ``strategy'' keyword input parameter of _get_local_steps_manager()_ at line 164 of _fl_simulator_nn/run_experiment.py_, respectively.
+The number of local steps in the training of local models can be chosen between ``optimal`` (VREM-FL), ``min``, and ``max``.
+This can be set through the ``comp`` parameter at line 35 of _Least_Squares_FL_code/main_FL_LS.py_
+or through the ``strategy`` keyword input parameter of _get_local_steps_manager()_ at line 164 of _fl_simulator_nn/run_experiment.py_, respectively.
 
 Detailed information about the scheduling algorithms is available in the documentation of the scripts in _Least_Squares_FL_code/Scheduling_algos_ or _fl_simulator_nn/utils/scheduler_utils.py_,
 and in our paper [VREMFL].
@@ -51,7 +51,7 @@ and in our paper [VREMFL].
 ## How to run
 After downloading or creating the datasets with client bitrate values,
 all experiments are readily executable by running the scripts _Least_Squares_FL_code/main_FL_LS.py_ and _fl_simulator_nn/run_experiment.py_, respectively.
-The latter requires to supply mandatory command line arguments ``experiment'' with the dataset description and ``tx_strategy''.
+The latter requires to supply mandatory command line arguments ``experiment`` with the dataset description and ``tx_strategy``.
 All command line arguments are visible in the example bash script _fl_simulator_nn/experiment/run_fedavg.sh_.
 For this experiment, it is also necessary to download the dataset [ApolloScape].
 
@@ -60,26 +60,26 @@ For this experiment, it is also necessary to download the dataset [ApolloScape].
 [Online]. Available: https://www.mathworks.com/help/5g/index.html?s_tid=CRUX_lftnav.
 
 [ApolloScape] X. Huang, X. Cheng, Q. Geng, B. Cao, D. Zhou, P. Wang, Y. Lin, and R. Yang, 
-``The apolloscape dataset for autonomous driving,''
+"The apolloscape dataset for autonomous driving,"
 in Proc. IEEE CVPR Workshops, 2018, pp. 954-960.
 
 [Chen24] C. Chen, B. Jiang, S. Liu, C. Li, C. Wu, and R. Yin, 
-``Efficient federated learning in resource-constrained edge intelligence networks using model compression,''
+"Efficient federated learning in resource-constrained edge intelligence networks using model compression,"
 IEEE Trans. Veh. Technol., vol. 73, no. 2, pp. 2643-2655, 2024.
 
 [DalFabbro22] N. Dal Fabbro, M. Rossi, G. Pillonetto, L. Schenato, and G. Piro, 
-``Model-free radio map estimation in massive MIMO systems via semi-parametric Gaussian regression,''
+"Model-free radio map estimation in massive MIMO systems via semi-parametric Gaussian regression,"
 IEEE Wireless Commun. Lett., vol. 11, no. 3, pp. 473-477, 2022.
 
 [OpenStreetMap] OSM. (2023) OpenStreetMap. Accessed on: Nov. 15, 2023. 
 [Online]. Available: https://www.openstreetmap.org/#map=6/42.088/12.564.
 
 [Ozfatura21] M. E. Ozfatura, J. Zhao, and D. Gündüz, 
-``Fast federated edge learning with overlapped communication and computation and channel-aware fair client scheduling,''
+"Fast federated edge learning with overlapped communication and computation and channel-aware fair client scheduling,"
 in Proc. IEEE SPAWC, 2021, pp. 311-315.
 
 [RomaTaxi] L. Bracciale, M. Bonola, P. Loreti, G. Bianchi, R. Amici, and A. Rabuffi,
-``Crawdad roma/taxi,'' 
+"Crawdad roma/taxi,"
 2022, accessed on: Mar. 6, 2024.
 [Online]. Available: https://dx.doi.org/10.15783/C7QC7M.
 
@@ -87,5 +87,5 @@ in Proc. IEEE SPAWC, 2021, pp. 311-315.
 [Online]. Available: https://eclipse.dev/sumo/.
 
 [VREMFL] L. Ballotta, N. Dal Fabbro, G. Perin, L. Schenato, M. Rossi, G. Piro,
-``VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning,''
+"VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning,"
 IEEE Trans. Veh. Technol., 2024.
