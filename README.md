@@ -55,6 +55,13 @@ The latter requires to supply mandatory command line arguments ``experiment`` wi
 All command line arguments are visible in the example bash script _fl_simulator_nn/experiment/run_fedavg.sh_.
 For this experiment, it is also necessary to download the dataset [ApolloScape].
 
+## Citation
+L. Ballotta, N. Dal Fabbro, G. Perin, L. Schenato, M. Rossi, G. Piro,
+"VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning,"
+IEEE Trans. Veh. Technol., 2024.
+
+The paper is freely available on ArXiv at https://arxiv.org/abs/2311.18741.
+
 ## References
 [5GToolbox] Mathworks. (2023) 5G Toolbox. Accessed on: Nov. 15, 2023.
 [Online]. Available: https://www.mathworks.com/help/5g/index.html?s_tid=CRUX_lftnav.
@@ -85,7 +92,3 @@ in Proc. IEEE SPAWC, 2021, pp. 311-315.
 
 [SUMO] Eclipse. (2023) Simulator of Urban MObility. Accessed on: Nov. 15, 2023. 
 [Online]. Available: https://eclipse.dev/sumo/.
-
-[VREMFL] L. Ballotta, N. Dal Fabbro, G. Perin, L. Schenato, M. Rossi, G. Piro,
-"VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning,"
-IEEE Trans. Veh. Technol., 2024.
