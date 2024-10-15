@@ -70,7 +70,8 @@ For this experiment, it is also necessary to download the dataset [ApolloScape].
 }
 ```
 
-The paper is freely available on ArXiv at https://arxiv.org/abs/2311.18741.
+The paper is freely available (open access).
+Supplementary material is available in the technical report on ArXiv at https://arxiv.org/abs/2311.18741.
 
 ## References
 [5GToolbox] Mathworks. (2023) 5G Toolbox. Accessed on: Nov. 15, 2023.
