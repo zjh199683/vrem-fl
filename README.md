@@ -56,9 +56,19 @@ All command line arguments are visible in the example bash script _fl_simulator_
 For this experiment, it is also necessary to download the dataset [ApolloScape].
 
 ## Citation
-L. Ballotta, N. Dal Fabbro, G. Perin, L. Schenato, M. Rossi, G. Piro,
-"VREM-FL: Mobility-Aware Computation-Scheduling Co-Design for Vehicular Federated Learning,"
-IEEE Trans. Veh. Technol., 2024.
+
+```
+@ARTICLE{10715716,
+  author={Ballotta, Luca and Fabbro, Nicolò Dal and Perin, Giovanni and Schenato, Luca and Rossi, Michele and Piro, Giuseppe},
+  journal={IEEE Transactions on Vehicular Technology}, 
+  title={{VREM-FL}: mobility-aware computation-scheduling co-design for vehicular federated learning}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-16},
+  doi={10.1109/TVT.2024.3479780}
+}
+```
 
 The paper is freely available on ArXiv at https://arxiv.org/abs/2311.18741.
 
